@@ -10,7 +10,8 @@
   "scripts": {
     "buildLoginBundle": "babel ./client/login ./client/helper --presets @babel/preset-react --out-file ./hosted/loginBundle.js",
     "buildAppBundle": "babel ./client/app ./client/helper --presets @babel/preset-react --out-file ./hosted/bundle.js",
-    "build": "npm run buildLoginBundle && npm run buildAppBundle",
+    "buildMakerBundle": "babel ./client/maker ./client/helper --presets @babel/preset-react --out-file ./hosted/makerBundle.js",
+    "build": "npm run buildLoginBundle && npm run buildAppBundle && npm run buildMakerBundle",
     "start": "node ./server/app.js",
     "pretest": "eslint ./server --fix",
     "test": "echo \"Tests complete\""
@@ -45,6 +46,7 @@
     "express-session": "^1.17.2",
     "helmet": "^4.6.0",
     "mongoose": "^6.0.12",
+    "qrcode": "^1.4.4",
     "redis": "^3.1.2",
     "serve-favicon": "^2.5.0",
     "underscore": "^1.13.1"

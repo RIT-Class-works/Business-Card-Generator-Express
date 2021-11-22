@@ -6,6 +6,12 @@ var handleNew = function handleNew() {
   });
 };
 
+var handleEdit = function handleEdit(cardId) {
+  console.log(" this is cardId : " + card._id);
+  sendAjax('GET', '/edit', cardId, redirect);
+  return false;
+};
+
 var UI = function UI() {
   return /*#__PURE__*/React.createElement("img", {
     src: "/assets/img/new.png",
@@ -21,10 +27,14 @@ var QRList = function QRList(props) {
 
   var qrNodes = props.businessCards.map(function (card) {
     return /*#__PURE__*/React.createElement("img", {
-      key: businessCards._id,
-      src: businessCards.qrcode,
+      key: card._id,
+      src: card.qrcode,
+      createDate: card.createDate,
       alt: "QRCode",
-      className: "businessCards"
+      className: "businessCards",
+      onClick: function onClick() {
+        handleEdit(card._id);
+      }
     });
   });
   return qrNodes;
@@ -49,54 +59,6 @@ var setup = function setup() {
 $(document).ready(function () {
   setup();
 });
-// const handleCreate = (e) =>{
-//     e.preventDefault();
-//     $("#messageBox").animate({width:'hide'}, 350);
-//     if($("#domoName").val() == '' || $("#domoAge").val() == ''){
-//         handleError("All fields are required");
-//         return false;
-//     }
-//     sendAjax('POST', $("#domoForm").attr("action"),$("#domoForm").serialize(), function(){
-//         loadDomosFromServer();
-//     })
-//     return false;
-// }
-// const DomoForm = (props) =>{
-//     return (
-//         <form id="domoForm"
-//             onSubmit={handleDomo}
-//             name="domoForm"
-//             action="/maker"
-//             method="POST"
-//             className="domoForm"
-//             >
-//             <label htmlFor="name">Name: </label>
-//             <input id="domoName" type="text" name="name" placeholder="Domo Name"/>
-//             <label htmlFor="age">Age: </label>
-//             <input id="domoAge" type="text" name="age" placeholder="Domo Age"/>
-//             <input type="hidden" name="_csrf" value={props.csrf} />
-//             <input type="submit" className="makeDomoSubmit" value="Make Domo"/>
-//         </form>
-//     );
-// }
-// const setup = function(csrf){
-//     ReactDOM.render(
-//         <DomoForm csrf={csrf} />, document.querySelector("#makeDomo")
-//     );
-//     ReactDOM.render(
-//         <DomoList domos={[]} />, document.querySelector("#domos")
-//     );
-//     loadDomosFromServer();
-// };
-// const getToken = () =>{
-//     sendAjax('GET', '/getToken', null, (result) =>{
-//         setup(result.csrfToken);
-//     });
-// };
-// $(document).ready(function(){
-//     getToken();
-// });
-"use strict";
 "use strict";
 
 var handleError = function handleError(message) {

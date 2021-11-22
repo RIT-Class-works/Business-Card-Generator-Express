@@ -3,6 +3,7 @@ const handleNew = ()=>{
 }
 
 const handleEdit = (cardId)=>{
+    console.log(" this is cardId : " + card._id);
     sendAjax('GET', '/edit', cardId, redirect);
 
     return false;

@@ -1,9 +1,18 @@
 const QRCode = (props) =>{
-    <div>
-        <img src={props.url} alt="qrcode" />
-    </div>
+    return(
+        <div>
+            <img src={props.url} alt="qrcode" />
+        </div>
+    ); 
 }
+const loadQRCode = ()=>{
+    sendAjax('GET', '/getLastAdded', null, (data)=>{
 
+        ReactDOM.render(
+            <QRCode url={data.businessCard.imageSrc} />, document.querySelector("#content")
+        );
+    });
+}
 const handleCreate = (e) =>{
     e.preventDefault();
 
@@ -14,10 +23,8 @@ const handleCreate = (e) =>{
         return false;
     }
 
-    sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function(qrcode){
-        ReactDOM.render(
-            <QRCode url = {qrcode.imageSrc} />, document.querySelector("#content")
-        );
+    sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function(){
+        loadQRCode();
     })
 
     return false;
@@ -28,42 +35,42 @@ const addLink = () =>{
 const BusinessForm = (props) =>{
     if(props.info.length === 0){
         return (
-                <form id="form" action="/GenerateQR" method="post">
-                    <div class="banner">
+                <form id="form" action="/maker" method="post">
+                    <div className="banner">
                         <h1>Virtual Business Card</h1>
                     </div>
-                    <div class="item">
+                    <div className="item">
                         <p>Name</p>
-                        <div class="name-item">
-                            <input type="text" name="name" placeholder="First" id="firstname"/>
-                            <input type="text" name="name" placeholder="Last" id="lastname"/>
+                        <div className="name-item">
+                            <input type="text" name="firstname" placeholder="First" id="firstname"/>
+                            <input type="text" name="lastname" placeholder="Last" id="lastname"/>
                         </div>
                     </div>
-                    <div class="contact-item">
-                        <div class="item">
+                    <div className="contact-item">
+                        <div className="item">
                             <p>Email</p>
-                            <input type="text" name="name" id="email"/>
+                            <input type="text" name="email" id="email"/>
                         </div>
-                        <div class="item">
+                        <div className="item">
                             <p>Phone</p>
-                            <input type="text" name="name" id="phone"/>
+                            <input type="text" name="phone" id="phone"/>
                         </div>
                     </div>
-                    <div class="item">
+                    <div className="item">
                         <p>Job/Position</p>
-                        <input type="text" name="name" id="title"/>
+                        <input type="text" name="title" id="title"/>
                     </div>
-                    <div class="item">
+                    <div className="item">
                         <p>Description About Yourself</p>
-                        <textarea rows="3" id="info" required></textarea>
+                        <textarea rows="3" name="info" id="info" required></textarea>
                     </div>
                 
-                    <div class="item" id="links">
+                    <div className="item" id="links">
                         <p>Your Links</p>
                         <input type="button" value="+" id="addlink"/> <br/>
-                        <input type="url" class="link"/> <br/>
+                        <input type="url" name="link" className="link"/> <br/>
                     </div>
-                    <div class="btn-block">
+                    <div className="btn-block">
                     <button id="generate" type="submit">Generate</button>
                     </div>
                     <input type="hidden" name="_csrf" value={props.csrf} />
@@ -75,47 +82,47 @@ const BusinessForm = (props) =>{
     
     const links = props.info.links.map((link)=>{
         <div>
-            <input type="url" class="link" value={link} />
+            <input type="url" name="link" className="link" value={link} />
         </div>
     });
 
     return (
         <form id="form" action="/maker" method="POST" onSubmit={handleCreate}>
-                <div class="banner">
+                <div className="banner">
                     <h1>Virtual Business Card</h1>
                 </div>
-                <div class="item">
+                <div className="item">
                     <p>Name</p>
-                    <div class="name-item">
-                        <input type="text" name="name" placeholder="First" id="firstname" value={props.info.firstName} />
-                        <input type="text" name="name" placeholder="Last" id="lastname" value={props.info.lasttName} />
+                    <div className="name-item">
+                        <input type="text" name="firstname" placeholder="First" id="firstname" value={props.info.firstName} />
+                        <input type="text" name="lastname" placeholder="Last" id="lastname" value={props.info.lasttName} />
                     </div>
                 </div>
-                <div class="contact-item">
-                    <div class="item">
+                <div className="contact-item">
+                    <div className="item">
                         <p>Email</p>
-                        <input type="text" name="name" id="email" value={props.info.email} />
+                        <input type="text" name="email" id="email" value={props.info.email} />
                     </div>
-                    <div class="item">
+                    <div className="item">
                         <p>Phone</p>
-                        <input type="text" name="name" id="phone" value={props.info.phone} />
+                        <input type="text" name="phone" id="phone" value={props.info.phone} />
                     </div>
                 </div>
-                <div class="item">
+                <div className="item">
                     <p>Job/Position</p>
-                    <input type="text" name="name" id="title" value={props.info.title} />
+                    <input type="text" name="title" id="title" value={props.info.title} />
                 </div>
-                <div class="item">
+                <div className="item">
                     <p>Description About Yourself</p>
-                    <textarea rows="3" id="info" value={props.info.title} required></textarea>
+                    <textarea rows="3" name="info" id="info" value={props.info.title} required></textarea>
                 </div>
             
-                <div class="item" id="links">
+                <div className="item" id="links">
                     <p>Your Links</p>
                     <input type="button" value="+" id="addlink" onClick = {addLink}/> <br/>
                     {links}
                 </div>
-                <div class="btn-block">
+                <div className="btn-block">
                 <button id="generate" type="submit">Generate</button>
                 </div>
                 <input type="hidden" name="_csrf" value={props.csrf} />

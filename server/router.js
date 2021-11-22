@@ -11,6 +11,7 @@ const router = (app) => {
   app.get('/app', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.mainPage);
   app.get('/getQRCodes', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.getQRCodes);
   app.get('/getBusinessCard', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.getBusinessCard);
+  app.get('/getLastAdded', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.getLastAdded);
   app.get('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makerPage);
   app.post('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makeBusinessCard);
   app.get('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editPage);

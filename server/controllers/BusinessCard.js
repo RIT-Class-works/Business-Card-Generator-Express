@@ -1,26 +1,31 @@
+const { response } = require('express');
 const QRCode = require('qrcode');
 const models = require('../models');
 
 const { BusinessCard } = models;
 
+let newBusinessCard = null;
+
 const mainPage = (req, res) => {
-  BusinessCard.BusinessCardModel.findByOwner(req.session.account._id, (err, docs) => {
+  BusinessCard.BusinessCardModel.findQRCode(req.session.account._id, (err, docs) => {
     if (err) {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-    console.log('redering app page');
+    console.log('rendering app page');
     console.log(docs);
     return res.render('app');
   });
 };
+
 const makerPage = (req, res) => res.render('createForm', { csrfToken: req.csrfToken() });
+
 const editPage = (req, res) => {
-  console.log(`item: ${req.query.cardId}`);
+  console.log(`item: ${req.query}`);
   return res.render('createForm', { csrfToken: req.csrfToken(), cardId: req.query.cardId });
 };
 
-const generateQR = (request, response, urlString, _businessCard) => {
+const generateQR = (req, res, urlString) => {
   console.log(urlString);
   const opts = {
     errorCorrectionLevel: 'H',
@@ -36,37 +41,36 @@ const generateQR = (request, response, urlString, _businessCard) => {
   QRCode.toDataURL(urlString, opts, (err, url) => {
     if (err) throw err;
     console.log(url);
-    _businessCard.qrcode = url;
-    const promise = _businessCard.save();
-    promise.then(() => {
-      res.status(201).json({ imageSrc: url });
-    });
-    promise.catch((err) => {
-      console.log(err);
+    newBusinessCard.qrcode = url;
+    const promise = newBusinessCard.save();
+    promise.then(() => res.json({ redirect: '/maker' }));
+    promise.catch((promiseError) => {
+      console.log(promiseError);
       return res.status(400).json({ error: 'An error occurred' });
     });
   });
 };
 // call from different page
 const makeBusinessCard = (req, res) => {
-  if (!req.body.firstName || !req.body.lastName || !req.body.description) {
+  console.log(`${req.body.firstname}, ${req.body.lastname}, ${req.body.info}`);
+  if (!req.body.firstname || !req.body.lastname || !req.body.info) {
     return res.status(400).json({ error: 'Both first & last name and description are required' });
   }
   console.log(req.session.account);
 
   const businessCardData = {
-    firstName: doc.firstName,
-    lastName: doc.lastName,
+    firstName: req.body.firstname,
+    lastName: req.body.lastname,
     email: req.body.email,
     phone: req.body.phone,
     title: req.body.title,
-    description: req.body.description,
-    links: req.body.links,
+    description: req.body.info,
+    links: req.body.link,
     qrcode: null,
     owner: req.session.account._id,
   };
 
-  const newBusinessCard = new BusinessCard.BusinessCardModel(businessCardData);
+  newBusinessCard = new BusinessCard.BusinessCardModel(businessCardData);
 
   const businessCardPromise = newBusinessCard.save();
 
@@ -75,7 +79,7 @@ const makeBusinessCard = (req, res) => {
     // generate qrcode
     const ObjectId = BusinessCard.BusinessCardModel.toAPI(newBusinessCard)._id;
     console.log(ObjectId);
-    generateQR(req, res, `${req.headers.host}/cardPage?id=${ObjectId}`, newBusinessCard);
+    generateQR(req, res, `${req.headers.host}/cardPage?id=${ObjectId}`);
   });
 
   businessCardPromise.catch((err) => {
@@ -117,7 +121,22 @@ const getBusinessCard = (request, response) => {
   });
 };
 
+const getLastAdded = (request, response) =>{
+  const req = request;
+  const res = response;
+
+  return BusinessCard.BusinessCardModel.findLastAdded((err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+
+    return res.json({ businessCard: docs });
+  });
+}
+
 module.exports.makeBusinessCard = makeBusinessCard;
+module.exports.getLastAdded = getLastAdded;
 module.exports.getBusinessCard = getBusinessCard;
 module.exports.getQRCodes = getQRCodes;
 module.exports.mainPage = mainPage;
