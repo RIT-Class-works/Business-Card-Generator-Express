@@ -1,4 +1,3 @@
-const { response } = require('express');
 const QRCode = require('qrcode');
 const models = require('../models');
 
@@ -121,8 +120,7 @@ const getBusinessCard = (request, response) => {
   });
 };
 
-const getLastAdded = (request, response) =>{
-  const req = request;
+const getLastAdded = (request, response) => {
   const res = response;
 
   return BusinessCard.BusinessCardModel.findLastAdded((err, docs) => {
@@ -133,7 +131,7 @@ const getLastAdded = (request, response) =>{
 
     return res.json({ businessCard: docs });
   });
-}
+};
 
 module.exports.makeBusinessCard = makeBusinessCard;
 module.exports.getLastAdded = getLastAdded;

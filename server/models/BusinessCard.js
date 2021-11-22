@@ -96,10 +96,9 @@ BusinessCardSchema.statics.findBusinessCard = (cardId, callback) => {
   return BusinessCardModel.find(search).select('name email phone title description links').lean().exec(callback);
 };
 
-BusinessCardSchema.statics.findLastAdded = (callback) => {
-  
-  return BusinessCardModel.find({}).limit(1).sort({$natural:-1}).select('qrcode').lean().exec(callback);
-};
+BusinessCardSchema.statics.findLastAdded = (callback) => BusinessCardModel.find({}).limit(1).sort({ $natural: -1 }).select('qrcode')
+  .lean()
+  .exec(callback);
 
 BusinessCardModel = mongoose.model('BusinessCard', BusinessCardSchema);
 
