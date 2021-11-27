@@ -14,7 +14,8 @@ const router = (app) => {
   app.get('/getLastAdded', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.getLastAdded);
   app.get('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makerPage);
   app.post('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makeBusinessCard);
-  app.get('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editPage);
+  app.post('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editPage);
+  app.get('/cardPage', mid.requiresSecure, controllers.BusinessCard.cardPage);
 };
 
 module.exports = router;

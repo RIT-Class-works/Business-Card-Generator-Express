@@ -1,17 +1,26 @@
+let csrfToken = null;
+
 const handleNew = ()=>{
     redirect({redirect: '/maker'});
 }
 
-const handleEdit = (cardId)=>{
-    console.log(" this is cardId : " + card._id);
-    sendAjax('GET', '/edit', cardId, redirect);
+const handleEdit = (_cardId)=>{
+    console.log(" this is cardId : " + _cardId);
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    });
+    sendAjax('POST', '/edit', {"cardId": _cardId}, redirect);
 
     return false;
 }
 
-const UI = () =>{
+const UI = (props) =>{
     return (
-        <img src="/assets/img/new.png" alt="new" onClick={handleNew} />
+        <div>
+            <img src="/assets/img/new.png" alt="new" onClick={handleNew} />
+        </div>
     );
 }
 const QRList = (props) =>{
@@ -37,9 +46,9 @@ const loadBusinessCardFromServer = () =>{
     });
 };
 
-const setup = function(){
+const setup = function(_csrf){
     ReactDOM.render(
-        <UI/>, document.querySelector("#new")
+        <UI csrf={_csrf} />, document.querySelector("#new")
     );
     ReactDOM.render(
         <QRList businessCards={[]} />, document.querySelector("#businessCards")
@@ -48,8 +57,15 @@ const setup = function(){
     loadBusinessCardFromServer();
 };
 
+const getToken = () =>{ 
+    sendAjax('GET', '/getToken', null, (result) =>{
+        csrfToken = result.csrfToken;
+        setup(result.csrfToken)
+    });
+    
+};
 
 $(document).ready(function(){
-    setup();
+    getToken();
 });
 

@@ -4,6 +4,7 @@ const models = require('../models');
 const { BusinessCard } = models;
 
 let newBusinessCard = null;
+let cardId = null
 
 const mainPage = (req, res) => {
   BusinessCard.BusinessCardModel.findQRCode(req.session.account._id, (err, docs) => {
@@ -17,11 +18,12 @@ const mainPage = (req, res) => {
   });
 };
 
-const makerPage = (req, res) => res.render('createForm', { csrfToken: req.csrfToken() });
+const makerPage = (req, res) => res.render('createForm', { _cardId: cardId });
 
 const editPage = (req, res) => {
-  console.log(`item: ${req.query}`);
-  return res.render('createForm', { csrfToken: req.csrfToken(), cardId: req.query.cardId });
+  console.log(`item: ${req.body.cardId}`);
+  cardId = req.body.cardId;
+  return res.json({ redirect: '/maker' });
 };
 
 const generateQR = (req, res, urlString) => {
@@ -42,7 +44,7 @@ const generateQR = (req, res, urlString) => {
     console.log(url);
     newBusinessCard.qrcode = url;
     const promise = newBusinessCard.save();
-    promise.then(() => res.json({ redirect: '/maker' }));
+    promise.then(() => {return res.json({ redirect: '/maker' })});
     promise.catch((promiseError) => {
       console.log(promiseError);
       return res.status(400).json({ error: 'An error occurred' });
@@ -115,8 +117,8 @@ const getBusinessCard = (request, response) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-
-    return res.json({ businessCard: docs });
+    const json = BusinessCard.BusinessCardModel.toAPI(docs);
+    return res.json({ businessCard: json });
   });
 };
 
@@ -133,6 +135,18 @@ const getLastAdded = (request, response) => {
   });
 };
 
+const cardPage = (request, response) =>{
+  const id = request.query.id
+  return BusinessCard.BusinessCardModel.findBusinessCard(id, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    const object = BusinessCard.BusinessCardModel.toAPI(docs);
+    res.render('presentForm', { firstName: object.firstName, lastName: object.lastName, email: object.email, phone: object.phone, title: object.title, info: object.description, links: object.links });
+  });
+}
+
 module.exports.makeBusinessCard = makeBusinessCard;
 module.exports.getLastAdded = getLastAdded;
 module.exports.getBusinessCard = getBusinessCard;
@@ -140,4 +154,4 @@ module.exports.getQRCodes = getQRCodes;
 module.exports.mainPage = mainPage;
 module.exports.makerPage = makerPage;
 module.exports.editPage = editPage;
-// start server to make sure it work step 17
+module.exports.cardPage = cardPage;

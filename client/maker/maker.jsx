@@ -7,7 +7,6 @@ const QRCode = (props) =>{
 }
 const loadQRCode = ()=>{
     sendAjax('GET', '/getLastAdded', null, (data)=>{
-
         ReactDOM.render(
             <QRCode url={data.businessCard.imageSrc} />, document.querySelector("#content")
         );
@@ -23,10 +22,11 @@ const handleCreate = (e) =>{
         return false;
     }
 
-    sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function(){
-        loadQRCode();
-    })
-
+    sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function () {
+            loadQRCode();
+        }
+    );
+    
     return false;
 }
 const addLink = () =>{
@@ -80,11 +80,76 @@ const BusinessForm = (props) =>{
         );
     }
     
-    const links = props.info.links.map((link)=>{
-        <div>
-            <input type="url" name="link" className="link" value={link} />
-        </div>
-    });
+    let links;
+    console.log(props.info.links);
+    if(props.info.links.length >0){
+        links = props.info.links.map((link)=>{
+            <div>
+                <input type="url" name="link" className="link" value={link} />
+            </div>
+        });
+    }
+    else{
+        links = (
+            <div>
+                <input type="url" name="link" className="link" />
+            </div>
+        );
+    }
+
+    let email;
+    if(props.info.email !=""){
+        email = (
+            <div className="item">
+                <p>Email</p>
+                <input type="text" name="email" id="email" defaultValue={props.info.email} />
+            </div>  
+        );  
+    }
+    else{
+        email = (
+            <div className="item">
+                <p>Email</p>
+                <input type="text" name="email" id="email" />
+            </div>  
+        ); 
+    }
+
+    let phone;
+    if(props.info.phone !=""){
+        phone = (
+            <div className="item">
+                <p>Phone</p>
+                <input type="text" name="phone" id="phone" defaultValue={props.info.phone} />
+            </div> 
+        );
+    }
+    else{
+        phone = (
+            <div className="item">
+                <p>Phone</p>
+                <input type="text" name="phone" id="phone" />
+            </div>  
+        );
+    }
+
+    let title;
+    if(props.info.title !=""){
+        title = (
+            <div className="item">
+                <p>Job/Position</p>
+                <input type="text" name="title" id="title" defaultValue={props.info.title} />
+            </div>
+        );
+    }
+    else{
+        title = (
+            <div className="item">
+                <p>Job/Position</p>
+                <input type="text" name="title" id="title" />
+            </div>
+        );
+    }
 
     return (
         <form id="form" action="/maker" method="POST" onSubmit={handleCreate}>
@@ -94,27 +159,18 @@ const BusinessForm = (props) =>{
                 <div className="item">
                     <p>Name</p>
                     <div className="name-item">
-                        <input type="text" name="firstname" placeholder="First" id="firstname" value={props.info.firstName} />
-                        <input type="text" name="lastname" placeholder="Last" id="lastname" value={props.info.lasttName} />
+                        <input type="text" name="firstname" placeholder="First" id="firstname" defaultValue={props.info.firstName} />
+                        <input type="text" name="lastname" placeholder="Last" id="lastname" defaultValue={props.info.lastName} />
                     </div>
                 </div>
                 <div className="contact-item">
-                    <div className="item">
-                        <p>Email</p>
-                        <input type="text" name="email" id="email" value={props.info.email} />
-                    </div>
-                    <div className="item">
-                        <p>Phone</p>
-                        <input type="text" name="phone" id="phone" value={props.info.phone} />
-                    </div>
+                    {email}
+                    {phone}
                 </div>
-                <div className="item">
-                    <p>Job/Position</p>
-                    <input type="text" name="title" id="title" value={props.info.title} />
-                </div>
+                {title}
                 <div className="item">
                     <p>Description About Yourself</p>
-                    <textarea rows="3" name="info" id="info" value={props.info.title} required></textarea>
+                    <textarea rows="3" name="info" id="info" defaultValue={props.info.description} required></textarea>
                 </div>
             
                 <div className="item" id="links">
@@ -132,19 +188,20 @@ const BusinessForm = (props) =>{
     );
 }
 const setup = function(csrf){
-    let query = $("#kjhsitl").value;
-    if(query != "" || query != null){
-        sendAjax('GET', '/getBusinessCard', query, (data)=>{
-
+    let query = $("#kjhsitaasdasdasdasdfcvxcvxvl").val();
+    console.log("query: " + query);
+    if(query === "" || query === null){
+        ReactDOM.render(
+            <BusinessForm csrf={csrf} info={[]} />, document.querySelector("#businessForm")
+        );
+    }
+    else{
+        sendAjax('GET', '/getBusinessCard', {cardId: query}, (data)=>{
+            console.log("BusinessCard.firtName: " + data.businessCard.firstName);
             ReactDOM.render(
                 <BusinessForm csrf={csrf} info={data.businessCard} />, document.querySelector("#businessForm")
             );
         });
-    }
-    else{
-        ReactDOM.render(
-            <BusinessForm csrf={csrf} info={[]} />, document.querySelector("#businessForm")
-        );
     }
 };
 

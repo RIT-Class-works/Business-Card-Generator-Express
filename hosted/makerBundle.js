@@ -108,15 +108,90 @@ var BusinessForm = function BusinessForm(props) {
     }));
   }
 
-  var links = props.info.links.map(function (link) {
-    /*#__PURE__*/
-    React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
+  var links;
+  console.log(props.info.links);
+
+  if (props.info.links.length > 0) {
+    links = props.info.links.map(function (link) {
+      /*#__PURE__*/
+      React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
+        type: "url",
+        name: "link",
+        className: "link",
+        value: link
+      }));
+    });
+  } else {
+    links = /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
       type: "url",
       name: "link",
-      className: "link",
-      value: link
+      className: "link"
     }));
-  });
+  }
+
+  var email;
+
+  if (props.info.email != "") {
+    email = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Email"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "email",
+      id: "email",
+      defaultValue: props.info.email
+    }));
+  } else {
+    email = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Email"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "email",
+      id: "email"
+    }));
+  }
+
+  var phone;
+
+  if (props.info.phone != "") {
+    phone = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Phone"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "phone",
+      id: "phone",
+      defaultValue: props.info.phone
+    }));
+  } else {
+    phone = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Phone"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "phone",
+      id: "phone"
+    }));
+  }
+
+  var title;
+
+  if (props.info.title != "") {
+    title = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Job/Position"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "title",
+      id: "title",
+      defaultValue: props.info.title
+    }));
+  } else {
+    title = /*#__PURE__*/React.createElement("div", {
+      className: "item"
+    }, /*#__PURE__*/React.createElement("p", null, "Job/Position"), /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "title",
+      id: "title"
+    }));
+  }
+
   return /*#__PURE__*/React.createElement("form", {
     id: "form",
     action: "/maker",
@@ -133,43 +208,22 @@ var BusinessForm = function BusinessForm(props) {
     name: "firstname",
     placeholder: "First",
     id: "firstname",
-    value: props.info.firstName
+    defaultValue: props.info.firstName
   }), /*#__PURE__*/React.createElement("input", {
     type: "text",
     name: "lastname",
     placeholder: "Last",
     id: "lastname",
-    value: props.info.lasttName
+    defaultValue: props.info.lastName
   }))), /*#__PURE__*/React.createElement("div", {
     className: "contact-item"
-  }, /*#__PURE__*/React.createElement("div", {
-    className: "item"
-  }, /*#__PURE__*/React.createElement("p", null, "Email"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    name: "email",
-    id: "email",
-    value: props.info.email
-  })), /*#__PURE__*/React.createElement("div", {
-    className: "item"
-  }, /*#__PURE__*/React.createElement("p", null, "Phone"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    name: "phone",
-    id: "phone",
-    value: props.info.phone
-  }))), /*#__PURE__*/React.createElement("div", {
-    className: "item"
-  }, /*#__PURE__*/React.createElement("p", null, "Job/Position"), /*#__PURE__*/React.createElement("input", {
-    type: "text",
-    name: "title",
-    id: "title",
-    value: props.info.title
-  })), /*#__PURE__*/React.createElement("div", {
+  }, email, phone), title, /*#__PURE__*/React.createElement("div", {
     className: "item"
   }, /*#__PURE__*/React.createElement("p", null, "Description About Yourself"), /*#__PURE__*/React.createElement("textarea", {
     rows: "3",
     name: "info",
     id: "info",
-    value: props.info.title,
+    defaultValue: props.info.description,
     required: true
   })), /*#__PURE__*/React.createElement("div", {
     className: "item",
@@ -194,20 +248,24 @@ var BusinessForm = function BusinessForm(props) {
 };
 
 var setup = function setup(csrf) {
-  var query = $("#kjhsitl").value;
+  var query = $("#kjhsitaasdasdasdasdfcvxcvxvl").val();
+  console.log("query: " + query);
 
-  if (query != "" || query != null) {
-    sendAjax('GET', '/getBusinessCard', query, function (data) {
+  if (query === "" || query === null) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(BusinessForm, {
+      csrf: csrf,
+      info: []
+    }), document.querySelector("#businessForm"));
+  } else {
+    sendAjax('GET', '/getBusinessCard', {
+      cardId: query
+    }, function (data) {
+      console.log("BusinessCard.firtName: " + data.businessCard.firstName);
       ReactDOM.render( /*#__PURE__*/React.createElement(BusinessForm, {
         csrf: csrf,
         info: data.businessCard
       }), document.querySelector("#businessForm"));
     });
-  } else {
-    ReactDOM.render( /*#__PURE__*/React.createElement(BusinessForm, {
-      csrf: csrf,
-      info: []
-    }), document.querySelector("#businessForm"));
   }
 };
 

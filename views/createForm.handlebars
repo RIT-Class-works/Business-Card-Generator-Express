@@ -1,5 +1,4 @@
-<!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Virtual Business Card</title>
       <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
@@ -16,7 +15,11 @@
       <!-- I use and modified a template from w3doc form-->
     
     <div id="businessForm">
-        <input id="kjhsitl" type="hidden" value={{cardId}} >
+      {{#if _cardId}}
+        <input id="kjhsitaasdasdasdasdfcvxcvxvl" type="hidden" value={{_cardId}} />
+      {{else}}
+        <input id="kjhsitaasdasdasdasdfcvxcvxvl" type="hidden"/>
+      {{/if}}
     </div>
     <div id="content" ></div>
     <script src="/assets/makerBundle.js"></script>

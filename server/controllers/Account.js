@@ -6,10 +6,6 @@ const loginPage = (req, res) => {
   res.render('login', { csrfToken: req.csrfToken() });
 };
 
-// const mainPage = (req, res) => {
-//   res.render('main', { csrfToken: req.csrfToken() });
-// };
-
 const logout = (req, res) => {
   req.session.destroy();
   res.redirect('/');

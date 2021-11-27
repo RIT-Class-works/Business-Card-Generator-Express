@@ -1,0 +1,56 @@
+<html lang="en">
+  <head>
+    <title>Virtual Business Card</title>
+      <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
+    <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link rel="stylesheet" type="text/css" href="/assets/presentForm.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
+  </head>
+  <body>
+      <!-- I use and modified a template from w3doc form-->
+    <section id="form">
+      <div id="businessForm">
+      <div className="banner">
+          <h1>Hello, This is my Business Card</h1>
+      </div>
+      <div className="item">
+          <p>Name</p>
+          <div className="name-item">
+              <p id="firstname"> {{firstName}} </p>
+              <p id="lastname"> {{lastname}} </p>
+          </div>
+      </div>
+      <div className="contact-item">
+          <div className="item">
+              <p>Email</p>
+              <p id="email"> {{email}} </p>
+          </div>
+          <div className="item">
+              <p>Phone</p>
+              <p id="phone"> {{phone}} </p>
+          </div>
+      </div>
+      <div className="item">
+          <p>Job/Position</p>
+          <p id="title"> {{title}} </p>
+      </div>
+      <div className="item">
+          <p>Description About Yourself</p>
+          <textarea id="info" > {{info}}</textarea>
+      </div>
+
+      <div className="item" id="links">
+          <p>Your Links</p>
+          {{#each links}}
+            <a href="{{this}}" className="link" >{{this}}</a> <br>
+          {{/each}}
+      </div>
+    </div>
+    </section>
+  </body>
+</html>

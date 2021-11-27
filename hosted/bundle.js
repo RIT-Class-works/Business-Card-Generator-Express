@@ -1,23 +1,32 @@
 "use strict";
 
+var csrfToken = null;
+
 var handleNew = function handleNew() {
   redirect({
     redirect: '/maker'
   });
 };
 
-var handleEdit = function handleEdit(cardId) {
-  console.log(" this is cardId : " + card._id);
-  sendAjax('GET', '/edit', cardId, redirect);
+var handleEdit = function handleEdit(_cardId) {
+  console.log(" this is cardId : " + _cardId);
+  $.ajaxSetup({
+    headers: {
+      'X-CSRF-TOKEN': csrfToken
+    }
+  });
+  sendAjax('POST', '/edit', {
+    "cardId": _cardId
+  }, redirect);
   return false;
 };
 
-var UI = function UI() {
-  return /*#__PURE__*/React.createElement("img", {
+var UI = function UI(props) {
+  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("img", {
     src: "/assets/img/new.png",
     alt: "new",
     onClick: handleNew
-  });
+  }));
 };
 
 var QRList = function QRList(props) {
@@ -48,16 +57,25 @@ var loadBusinessCardFromServer = function loadBusinessCardFromServer() {
   });
 };
 
-var setup = function setup() {
-  ReactDOM.render( /*#__PURE__*/React.createElement(UI, null), document.querySelector("#new"));
+var setup = function setup(_csrf) {
+  ReactDOM.render( /*#__PURE__*/React.createElement(UI, {
+    csrf: _csrf
+  }), document.querySelector("#new"));
   ReactDOM.render( /*#__PURE__*/React.createElement(QRList, {
     businessCards: []
   }), document.querySelector("#businessCards"));
   loadBusinessCardFromServer();
 };
 
+var getToken = function getToken() {
+  sendAjax('GET', '/getToken', null, function (result) {
+    csrfToken = result.csrfToken;
+    setup(result.csrfToken);
+  });
+};
+
 $(document).ready(function () {
-  setup();
+  getToken();
 });
 "use strict";
 

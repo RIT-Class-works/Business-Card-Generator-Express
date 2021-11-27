@@ -20,6 +20,7 @@ const sendAjax = (type, action, data, success) => {
             var messageObj = JSON.parse(xhr.responseText);
             handleError(messageObj.error);
         }
-    });
+    });   
 };
+
 

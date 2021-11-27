@@ -93,7 +93,7 @@ BusinessCardSchema.statics.findBusinessCard = (cardId, callback) => {
     _id: convertID(cardId),
   };
 
-  return BusinessCardModel.find(search).select('name email phone title description links').lean().exec(callback);
+  return BusinessCardModel.findOne(search).select('firstName lastName email phone title description links').lean().exec(callback);
 };
 
 BusinessCardSchema.statics.findLastAdded = (callback) => BusinessCardModel.find({}).limit(1).sort({ $natural: -1 }).select('qrcode')
