@@ -8,7 +8,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/remarkable/1.6.2/remarkable.min.js"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css" integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="/assets/presentForm.css">
+    {{!-- <link rel="stylesheet" type="text/css" href="/assets/presentForm.css"> --}}
     <script src="https://cdnjs.cloudflare.com/ajax/libs/babel-core/5.8.34/browser.min.js"></script>
   </head>
   <body>
@@ -21,23 +21,23 @@
       <div className="item">
           <p>Name</p>
           <div className="name-item">
-              <p id="firstname"> {{firstName}} </p>
-              <p id="lastname"> {{lastname}} </p>
+              <p id="firstname"> {{fn}} </p>
+              <p id="lastname"> {{ln}} </p>
           </div>
       </div>
       <div className="contact-item">
           <div className="item">
               <p>Email</p>
-              <p id="email"> {{email}} </p>
+              <p id="email"> {{e}} </p>
           </div>
           <div className="item">
               <p>Phone</p>
-              <p id="phone"> {{phone}} </p>
+              <p id="phone"> {{p}} </p>
           </div>
       </div>
       <div className="item">
           <p>Job/Position</p>
-          <p id="title"> {{title}} </p>
+          <p id="title"> {{t}} </p>
       </div>
       <div className="item">
           <p>Description About Yourself</p>
