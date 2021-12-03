@@ -1,14 +1,22 @@
-const QRCode = (props) =>{
-    return(
-        <div>
-            <img src={props.url.qrcode} alt="qrcode" />
+
+const closeQRWindow = ()=>{
+    redirect({redirect: '/app'});
+}
+const QRWindow = (props)=>{
+    return (
+        <div className="pop-up">
+            <div  className="pop-up-content">
+                <div id="close" className="close" onClick={closeQRWindow} >+</div>
+                <img src={props.url.qrcode} alt="qrcode" />
+            </div>
         </div>
-    ); 
+    );
 }
 const getLastQRCode = ()=>{
+
     sendAjax('GET', '/getLastAdded', null, (data)=>{
         ReactDOM.render(
-            <QRCode url={data.businessCard} />, document.querySelector("#content")
+            <QRWindow url={data.businessCard} />, document.querySelector("#pop-up-window")
         );
     });
 }
@@ -60,6 +68,7 @@ const addLink = () =>{
     element.append(input);
     element.append(br);
 }
+
 const BusinessForm = (props) =>{
     if(props.info.length === 0){
         return (

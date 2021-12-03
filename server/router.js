@@ -19,6 +19,7 @@ const router = (app) => {
   app.post('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makeEdit);
   app.post('/delete', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.deleteCard);
   app.get('/cardPage', mid.requiresSecure, controllers.BusinessCard.cardPage);
+  app.get('*', (req, res) => { res.render('notfound'); });
 };
 
 module.exports = router;

@@ -1,17 +1,31 @@
 "use strict";
 
-var QRCode = function QRCode(props) {
-  return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("img", {
+var closeQRWindow = function closeQRWindow() {
+  redirect({
+    redirect: '/app'
+  });
+};
+
+var QRWindow = function QRWindow(props) {
+  return /*#__PURE__*/React.createElement("div", {
+    className: "pop-up"
+  }, /*#__PURE__*/React.createElement("div", {
+    className: "pop-up-content"
+  }, /*#__PURE__*/React.createElement("div", {
+    id: "close",
+    className: "close",
+    onClick: closeQRWindow
+  }, "+"), /*#__PURE__*/React.createElement("img", {
     src: props.url.qrcode,
     alt: "qrcode"
-  }));
+  })));
 };
 
 var getLastQRCode = function getLastQRCode() {
   sendAjax('GET', '/getLastAdded', null, function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(QRCode, {
+    ReactDOM.render( /*#__PURE__*/React.createElement(QRWindow, {
       url: data.businessCard
-    }), document.querySelector("#content"));
+    }), document.querySelector("#pop-up-window"));
   });
 };
 

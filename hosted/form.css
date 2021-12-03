@@ -118,3 +118,32 @@ button:hover {
         width: calc(100% - 12px);
     }
 }
+.pop-up{
+    width: 100%;
+    height: 100%;
+    background-color: rgba( 0, 0, 0, 0.4);
+    position: absolute;
+    top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.pop-up-content{
+    width: 500px;
+    height: 300px;
+    background-color: white;
+    border-radius: 4px;
+    text-align: center;
+    padding: 20px;
+    position: relative;
+}
+
+.close{
+    position: absolute;
+    top: 0;
+    right: 14px;
+    font-size: 42px;
+    transform: rotate(45deg);
+    cursor: pointer;
+    caret-color: transparent;
+}
