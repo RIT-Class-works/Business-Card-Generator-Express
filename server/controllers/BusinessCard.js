@@ -4,7 +4,7 @@ const models = require('../models');
 const { BusinessCard } = models;
 
 let newBusinessCard = null;
-let cardId = null
+let cardId = null;
 
 const mainPage = (req, res) => {
   BusinessCard.BusinessCardModel.findQRCode(req.session.account._id, (err, docs) => {
@@ -18,13 +18,35 @@ const mainPage = (req, res) => {
   });
 };
 
-const makerPage = (req, res) => res.render('createForm', { _cardId: cardId });
+const makerPage = (req, res) => res.render('createForm');
+const editPage = (req, res) => res.render('createForm', { _cardId: cardId });
 
-const editPage = (req, res) => {
-  console.log(`item: ${req.body.cardId}`);
-  cardId = req.body.cardId;
-  return res.json({ redirect: '/maker' });
+const editRedirect = (req, res) => {
+  console.log(`item: ${req.query.cardId}`);
+  cardId = req.query.cardId;
+  return res.json({ redirect: '/editing' });
 };
+
+const makeEdit = (req, res) =>{
+  const json = {
+    firstName: req.body.firstname,
+    lastName: req.body.lastname,
+    email: req.body.email,
+    phone: req.body.phone,
+    title: req.body.title,
+    description: req.body.info,
+    links: req.body.link,
+  }
+  console.log(json);
+  BusinessCard.BusinessCardModel.update(req.body._id, json, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return res.status(400).json({ error: 'An error occurred' });
+    }
+    console.log(docs);
+    return res.json({ businessCard: docs});
+  });
+}
 
 const generateQR = (req, res, urlString) => {
   console.log(urlString);
@@ -44,7 +66,7 @@ const generateQR = (req, res, urlString) => {
     console.log(url);
     newBusinessCard.qrcode = url;
     const promise = newBusinessCard.save();
-    promise.then(() => {return res.json({ redirect: '/maker' })});
+    promise.then(() => res.json({ redirect: '/maker' }));
     promise.catch((promiseError) => {
       console.log(promiseError);
       return res.status(400).json({ error: 'An error occurred' });
@@ -54,12 +76,13 @@ const generateQR = (req, res, urlString) => {
 // call from different page
 const makeBusinessCard = (req, res) => {
   console.log(`${req.body.firstname}, ${req.body.lastname}, ${req.body.info}`);
-  if (!req.body.firstname || !req.body.lastname || !req.body.info) {
-    return res.status(400).json({ error: 'Both first & last name and description are required' });
+  if (!req.body.cardName ||!req.body.firstname || !req.body.lastname || !req.body.info) {
+    return res.status(400).json({ error: 'Card name, your first & last name ,and description are required' });
   }
   console.log(req.session.account);
 
   const businessCardData = {
+    cardName: req.body.cardName,
     firstName: req.body.firstname,
     lastName: req.body.lastname,
     email: req.body.email,
@@ -103,7 +126,7 @@ const getQRCodes = (request, response) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
-
+    console.log(docs);
     return res.json({ businessCards: docs });
   });
 };
@@ -117,7 +140,9 @@ const getBusinessCard = (request, response) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
+    console.log(docs);
     const json = BusinessCard.BusinessCardModel.toAPI(docs);
+    console.log(json);
     return res.json({ businessCard: json });
   });
 };
@@ -130,21 +155,38 @@ const getLastAdded = (request, response) => {
       console.log(err);
       return res.status(400).json({ error: 'An error occurred' });
     }
+    const json = BusinessCard.BusinessCardModel.toAPI(docs[0]);
+    console.log(docs);
+    console.log(json);
 
-    return res.json({ businessCard: docs });
+    return res.json({ businessCard: json });
   });
 };
 
-const cardPage = (request, response) =>{
-  const id = request.query.id
-  return BusinessCard.BusinessCardModel.findBusinessCard(id, (err, docs) => {
+const cardPage = (request, response) => {
+  const { id } = request.query;
+  BusinessCard.BusinessCardModel.findBusinessCard(id, (err, docs) => {
     if (err) {
       console.log(err);
-      return res.status(400).json({ error: 'An error occurred' });
+      response.status(400).json({ error: 'An error occurred' });
     }
     const object = BusinessCard.BusinessCardModel.toAPI(docs);
-    res.render('presentForm', { firstName: object.firstName, lastName: object.lastName, email: object.email, phone: object.phone, title: object.title, info: object.description, links: object.links });
+    response.render('presentForm', {
+      first: object.firstName, lastName: object.lastName, email: object.email, phone: object.phone, title: object.title, info: object.description, links: object.links,
+    });
   });
+};
+
+const deleteCard = (request, response) =>{
+  return BusinessCard.BusinessCardModel.delete(request.body.cardId, (err, docs) => {
+    if (err) {
+      console.log(err);
+      return response.status(400).json({ error: 'An error occurred' });
+    }
+    
+    return response.json({ redirect: '/app' });
+  });
+  
 }
 
 module.exports.makeBusinessCard = makeBusinessCard;
@@ -154,4 +196,7 @@ module.exports.getQRCodes = getQRCodes;
 module.exports.mainPage = mainPage;
 module.exports.makerPage = makerPage;
 module.exports.editPage = editPage;
+module.exports.editRedirect = editRedirect;
+module.exports.makeEdit = makeEdit;
 module.exports.cardPage = cardPage;
+module.exports.deleteCard = deleteCard;

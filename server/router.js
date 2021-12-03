@@ -14,7 +14,10 @@ const router = (app) => {
   app.get('/getLastAdded', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.getLastAdded);
   app.get('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makerPage);
   app.post('/maker', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makeBusinessCard);
-  app.post('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editPage);
+  app.get('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editRedirect);
+  app.get('/editing', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.editPage);
+  app.post('/edit', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.makeEdit);
+  app.post('/delete', mid.requiresSecure, mid.requiresLogin, controllers.BusinessCard.deleteCard);
   app.get('/cardPage', mid.requiresSecure, controllers.BusinessCard.cardPage);
 };
 

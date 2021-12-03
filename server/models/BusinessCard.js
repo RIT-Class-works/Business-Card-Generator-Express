@@ -9,6 +9,12 @@ const convertID = mongoose.Types.ObjectId;
 const setString = (string) => _.escape(string).trim();
 
 const BusinessCardSchema = new mongoose.Schema({
+  cardName:{
+    type: String,
+    required: true,
+    trim: true,
+    set: setString,
+  },
   firstName: {
     type: String,
     required: true,
@@ -69,7 +75,9 @@ const BusinessCardSchema = new mongoose.Schema({
 });
 
 BusinessCardSchema.statics.toAPI = (doc) => ({
-  _id: convertID(doc.ObjectId),
+  _id: doc._id,
+  cardName: doc.cardName,
+  qrcode: doc.qrcode,
   firstName: doc.firstName,
   lastName: doc.lastName,
   email: doc.email,
@@ -77,7 +85,6 @@ BusinessCardSchema.statics.toAPI = (doc) => ({
   title: doc.title,
   description: doc.description,
   links: doc.links,
-  qrcode: doc.qrcode,
 });
 
 BusinessCardSchema.statics.findQRCode = (ownerId, callback) => {
@@ -85,7 +92,7 @@ BusinessCardSchema.statics.findQRCode = (ownerId, callback) => {
     owner: convertID(ownerId),
   };
 
-  return BusinessCardModel.find(search).select('qrcode createDate').lean().exec(callback);
+  return BusinessCardModel.find(search).select('qrcode cardName ObjectId').lean().exec(callback);
 };
 
 BusinessCardSchema.statics.findBusinessCard = (cardId, callback) => {
@@ -93,10 +100,28 @@ BusinessCardSchema.statics.findBusinessCard = (cardId, callback) => {
     _id: convertID(cardId),
   };
 
-  return BusinessCardModel.findOne(search).select('firstName lastName email phone title description links').lean().exec(callback);
+  return BusinessCardModel.findOne(search).select('ObjectId cardName firstName lastName email phone title description links').lean().exec(callback);
 };
 
-BusinessCardSchema.statics.findLastAdded = (callback) => BusinessCardModel.find({}).limit(1).sort({ $natural: -1 }).select('qrcode')
+BusinessCardSchema.statics.update = (cardId, json, callback) => {
+  const search = {
+    _id: convertID(cardId),
+  };
+
+  console.log("id search:" + search);
+
+  return BusinessCardModel.findByIdAndUpdate(search, json, {upsert: false, new: true}).exec(callback);
+};
+
+BusinessCardSchema.statics.delete = (cardId, callback) => {
+  const search = {
+    _id: convertID(cardId),
+  };
+
+  return BusinessCardModel.deleteOne(search).exec(callback);
+};
+
+BusinessCardSchema.statics.findLastAdded = (callback) => BusinessCardModel.find({}).limit(1).sort({ $natural: -1 }).select('ObjectId qrcode')
   .lean()
   .exec(callback);
 

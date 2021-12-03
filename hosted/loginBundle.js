@@ -50,14 +50,16 @@ var LoginWindow = function LoginWindow(props) {
     id: "user",
     type: "text",
     name: "username",
-    placeholder: "username"
+    placeholder: "username",
+    required: true
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
-    placeholder: "password"
+    placeholder: "password",
+    required: true
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -83,21 +85,24 @@ var SignupWindow = function SignupWindow(props) {
     id: "user",
     type: "text",
     name: "username",
-    placeholder: "username"
+    placeholder: "username",
+    required: true
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pass"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass",
     type: "password",
     name: "pass",
-    placeholder: "password"
+    placeholder: "password",
+    required: true
   }), /*#__PURE__*/React.createElement("label", {
     htmlFor: "pas2"
   }, "Password: "), /*#__PURE__*/React.createElement("input", {
     id: "pass2",
     type: "password",
     name: "pass2",
-    placeholder: "retype password"
+    placeholder: "retype password",
+    required: true
   }), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
@@ -149,16 +154,14 @@ $(document).ready(function () {
 "use strict";
 
 var handleError = function handleError(message) {
-  $("#errorMessage").text(message);
-  $("#messageBox").animate({
-    width: 'toggle'
-  }, 350);
+  $("#errorMessage").text(message); //$("#messageBox").animate({width:'toggle'}, 350);
+
+  $("#messageBox").show();
 };
 
 var redirect = function redirect(response) {
-  $("#messageBox").animate({
-    width: 'hide'
-  }, 350);
+  //$("#messageBox").animate({width:'hide'}, 350);
+  $("#messageBox").hide();
   window.location = response.redirect;
 };
 

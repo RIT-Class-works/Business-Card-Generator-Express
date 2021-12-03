@@ -1,14 +1,14 @@
 const QRCode = (props) =>{
     return(
         <div>
-            <img src={props.url} alt="qrcode" />
+            <img src={props.url.qrcode} alt="qrcode" />
         </div>
     ); 
 }
-const loadQRCode = ()=>{
+const getLastQRCode = ()=>{
     sendAjax('GET', '/getLastAdded', null, (data)=>{
         ReactDOM.render(
-            <QRCode url={data.businessCard.imageSrc} />, document.querySelector("#content")
+            <QRCode url={data.businessCard} />, document.querySelector("#content")
         );
     });
 }
@@ -17,33 +17,61 @@ const handleCreate = (e) =>{
 
     $("#messageBox").animate({width:'hide'}, 350);
 
-    if($("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '' ){
-        handleError("First & Last name and Description are required");
+    if( $("#cardName").val() == '' || $("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '' ){
+        handleError("Card Name, Your First & Last name, and Description are required");
         return false;
     }
 
     sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function () {
-            loadQRCode();
+            getLastQRCode();
         }
-    );
+    );;
+    
+    return false;
+}
+const handleEdit = (e) =>{
+    e.preventDefault();
+
+    $("#messageBox").animate({width:'hide'}, 350);
+
+    if($("#cardName").val() == '' || $("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '' ){
+        handleError("Card Name, Your First & Last name, and Description are required");
+        return false;
+    }
+
+    sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function (data) {
+            ReactDOM.render(
+                <QRCode url={data.businessCard} />, document.querySelector("#content")
+            );
+        }
+    );;
     
     return false;
 }
 const addLink = () =>{
+    const element = document.querySelector("#links");
+    const input = document.createElement("input");
+    const br = document.createElement("br");
     
+    input.type = "url";
+    input.name = "link";
+    input.className = "link";
+    
+    element.append(input);
+    element.append(br);
 }
 const BusinessForm = (props) =>{
     if(props.info.length === 0){
         return (
-                <form id="form" action="/maker" method="post">
+                <form id="form" action="/maker" method="post" onSubmit={handleCreate}>
                     <div className="banner">
-                        <h1>Virtual Business Card</h1>
+                        <input type="text" name="cardName" placeholder="New Business Card" id="cardName" required/>
                     </div>
                     <div className="item">
                         <p>Name</p>
                         <div className="name-item">
-                            <input type="text" name="firstname" placeholder="First" id="firstname"/>
-                            <input type="text" name="lastname" placeholder="Last" id="lastname"/>
+                            <input type="text" name="firstname" placeholder="First" id="firstname" required/>
+                            <input type="text" name="lastname" placeholder="Last" id="lastname" required/>
                         </div>
                     </div>
                     <div className="contact-item">
@@ -67,7 +95,7 @@ const BusinessForm = (props) =>{
                 
                     <div className="item" id="links">
                         <p>Your Links</p>
-                        <input type="button" value="+" id="addlink"/> <br/>
+                        <input type="button" value="+" id="addlink" onClick={addLink} /> <br/>
                         <input type="url" name="link" className="link"/> <br/>
                     </div>
                     <div className="btn-block">
@@ -152,15 +180,15 @@ const BusinessForm = (props) =>{
     }
 
     return (
-        <form id="form" action="/maker" method="POST" onSubmit={handleCreate}>
+        <form id="form" action="/edit" method="POST" onSubmit={handleEdit}>
                 <div className="banner">
-                    <h1>Virtual Business Card</h1>
+                    <input type="text" name="cardName"  defaultValue={props.info.cardName} id="cardName" required/>
                 </div>
                 <div className="item">
                     <p>Name</p>
                     <div className="name-item">
-                        <input type="text" name="firstname" placeholder="First" id="firstname" defaultValue={props.info.firstName} />
-                        <input type="text" name="lastname" placeholder="Last" id="lastname" defaultValue={props.info.lastName} />
+                        <input type="text" name="firstname" placeholder="First" id="firstname" defaultValue={props.info.firstName} required/>
+                        <input type="text" name="lastname" placeholder="Last" id="lastname" defaultValue={props.info.lastName} required/>
                     </div>
                 </div>
                 <div className="contact-item">
@@ -179,9 +207,10 @@ const BusinessForm = (props) =>{
                     {links}
                 </div>
                 <div className="btn-block">
-                <button id="generate" type="submit">Generate</button>
+                <button id="generate" type="submit">Update</button>
                 </div>
                 <input type="hidden" name="_csrf" value={props.csrf} />
+                <input type="hidden" name="_id" value={props.info._id} />
                 <div id="content">
                 </div>
         </form>

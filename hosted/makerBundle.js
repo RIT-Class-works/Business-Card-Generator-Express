@@ -2,15 +2,15 @@
 
 var QRCode = function QRCode(props) {
   return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("img", {
-    src: props.url,
+    src: props.url.qrcode,
     alt: "qrcode"
   }));
 };
 
-var loadQRCode = function loadQRCode() {
+var getLastQRCode = function getLastQRCode() {
   sendAjax('GET', '/getLastAdded', null, function (data) {
     ReactDOM.render( /*#__PURE__*/React.createElement(QRCode, {
-      url: data.businessCard.imageSrc
+      url: data.businessCard
     }), document.querySelector("#content"));
   });
 };
@@ -21,28 +21,65 @@ var handleCreate = function handleCreate(e) {
     width: 'hide'
   }, 350);
 
-  if ($("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '') {
-    handleError("First & Last name and Description are required");
+  if ($("#cardName").val() == '' || $("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '') {
+    handleError("Card Name, Your First & Last name, and Description are required");
     return false;
   }
 
   sendAjax('POST', $("#form").attr("action"), $("#form").serialize(), function () {
-    loadQRCode();
+    getLastQRCode();
   });
+  ;
   return false;
 };
 
-var addLink = function addLink() {};
+var handleEdit = function handleEdit(e) {
+  e.preventDefault();
+  $("#messageBox").animate({
+    width: 'hide'
+  }, 350);
+
+  if ($("#cardName").val() == '' || $("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '') {
+    handleError("Card Name, Your First & Last name, and Description are required");
+    return false;
+  }
+
+  sendAjax('POST', $("#form").attr("action"), $("#form").serialize(), function (data) {
+    ReactDOM.render( /*#__PURE__*/React.createElement(QRCode, {
+      url: data.businessCard
+    }), document.querySelector("#content"));
+  });
+  ;
+  return false;
+};
+
+var addLink = function addLink() {
+  var element = document.querySelector("#links");
+  var input = document.createElement("input");
+  var br = document.createElement("br");
+  input.type = "url";
+  input.name = "link";
+  input.className = "link";
+  element.append(input);
+  element.append(br);
+};
 
 var BusinessForm = function BusinessForm(props) {
   if (props.info.length === 0) {
     return /*#__PURE__*/React.createElement("form", {
       id: "form",
       action: "/maker",
-      method: "post"
+      method: "post",
+      onSubmit: handleCreate
     }, /*#__PURE__*/React.createElement("div", {
       className: "banner"
-    }, /*#__PURE__*/React.createElement("h1", null, "Virtual Business Card")), /*#__PURE__*/React.createElement("div", {
+    }, /*#__PURE__*/React.createElement("input", {
+      type: "text",
+      name: "cardName",
+      placeholder: "New Business Card",
+      id: "cardName",
+      required: true
+    })), /*#__PURE__*/React.createElement("div", {
       className: "item"
     }, /*#__PURE__*/React.createElement("p", null, "Name"), /*#__PURE__*/React.createElement("div", {
       className: "name-item"
@@ -50,12 +87,14 @@ var BusinessForm = function BusinessForm(props) {
       type: "text",
       name: "firstname",
       placeholder: "First",
-      id: "firstname"
+      id: "firstname",
+      required: true
     }), /*#__PURE__*/React.createElement("input", {
       type: "text",
       name: "lastname",
       placeholder: "Last",
-      id: "lastname"
+      id: "lastname",
+      required: true
     }))), /*#__PURE__*/React.createElement("div", {
       className: "contact-item"
     }, /*#__PURE__*/React.createElement("div", {
@@ -89,7 +128,8 @@ var BusinessForm = function BusinessForm(props) {
     }, /*#__PURE__*/React.createElement("p", null, "Your Links"), /*#__PURE__*/React.createElement("input", {
       type: "button",
       value: "+",
-      id: "addlink"
+      id: "addlink",
+      onClick: addLink
     }), " ", /*#__PURE__*/React.createElement("br", null), /*#__PURE__*/React.createElement("input", {
       type: "url",
       name: "link",
@@ -194,12 +234,18 @@ var BusinessForm = function BusinessForm(props) {
 
   return /*#__PURE__*/React.createElement("form", {
     id: "form",
-    action: "/maker",
+    action: "/edit",
     method: "POST",
-    onSubmit: handleCreate
+    onSubmit: handleEdit
   }, /*#__PURE__*/React.createElement("div", {
     className: "banner"
-  }, /*#__PURE__*/React.createElement("h1", null, "Virtual Business Card")), /*#__PURE__*/React.createElement("div", {
+  }, /*#__PURE__*/React.createElement("input", {
+    type: "text",
+    name: "cardName",
+    defaultValue: props.info.cardName,
+    id: "cardName",
+    required: true
+  })), /*#__PURE__*/React.createElement("div", {
     className: "item"
   }, /*#__PURE__*/React.createElement("p", null, "Name"), /*#__PURE__*/React.createElement("div", {
     className: "name-item"
@@ -208,13 +254,15 @@ var BusinessForm = function BusinessForm(props) {
     name: "firstname",
     placeholder: "First",
     id: "firstname",
-    defaultValue: props.info.firstName
+    defaultValue: props.info.firstName,
+    required: true
   }), /*#__PURE__*/React.createElement("input", {
     type: "text",
     name: "lastname",
     placeholder: "Last",
     id: "lastname",
-    defaultValue: props.info.lastName
+    defaultValue: props.info.lastName,
+    required: true
   }))), /*#__PURE__*/React.createElement("div", {
     className: "contact-item"
   }, email, phone), title, /*#__PURE__*/React.createElement("div", {
@@ -238,10 +286,14 @@ var BusinessForm = function BusinessForm(props) {
   }, /*#__PURE__*/React.createElement("button", {
     id: "generate",
     type: "submit"
-  }, "Generate")), /*#__PURE__*/React.createElement("input", {
+  }, "Update")), /*#__PURE__*/React.createElement("input", {
     type: "hidden",
     name: "_csrf",
     value: props.csrf
+  }), /*#__PURE__*/React.createElement("input", {
+    type: "hidden",
+    name: "_id",
+    value: props.info._id
   }), /*#__PURE__*/React.createElement("div", {
     id: "content"
   }));
@@ -281,16 +333,14 @@ $(document).ready(function () {
 "use strict";
 
 var handleError = function handleError(message) {
-  $("#errorMessage").text(message);
-  $("#messageBox").animate({
-    width: 'toggle'
-  }, 350);
+  $("#errorMessage").text(message); //$("#messageBox").animate({width:'toggle'}, 350);
+
+  $("#messageBox").show();
 };
 
 var redirect = function redirect(response) {
-  $("#messageBox").animate({
-    width: 'hide'
-  }, 350);
+  //$("#messageBox").animate({width:'hide'}, 350);
+  $("#messageBox").hide();
   window.location = response.redirect;
 };
 
