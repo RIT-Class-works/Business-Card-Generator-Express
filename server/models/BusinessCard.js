@@ -9,7 +9,7 @@ const convertID = mongoose.Types.ObjectId;
 const setString = (string) => _.escape(string).trim();
 
 const BusinessCardSchema = new mongoose.Schema({
-  cardName:{
+  cardName: {
     type: String,
     required: true,
     trim: true,
@@ -108,9 +108,10 @@ BusinessCardSchema.statics.update = (cardId, json, callback) => {
     _id: convertID(cardId),
   };
 
-  console.log("id search:" + search);
+  console.log(`id search:${search}`);
 
-  return BusinessCardModel.findByIdAndUpdate(search, json, {upsert: false, new: true}).exec(callback);
+  return BusinessCardModel.findByIdAndUpdate(search, json, { upsert: false, new: true })
+    .exec(callback);
 };
 
 BusinessCardSchema.statics.delete = (cardId, callback) => {

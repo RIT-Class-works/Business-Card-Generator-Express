@@ -27,7 +27,7 @@ const editRedirect = (req, res) => {
   return res.json({ redirect: '/editing' });
 };
 
-const makeEdit = (req, res) =>{
+const makeEdit = (req, res) => {
   const json = {
     firstName: req.body.firstname,
     lastName: req.body.lastname,
@@ -36,7 +36,7 @@ const makeEdit = (req, res) =>{
     title: req.body.title,
     description: req.body.info,
     links: req.body.link,
-  }
+  };
   console.log(json);
   BusinessCard.BusinessCardModel.update(req.body._id, json, (err, docs) => {
     if (err) {
@@ -44,9 +44,9 @@ const makeEdit = (req, res) =>{
       return res.status(400).json({ error: 'An error occurred' });
     }
     console.log(docs);
-    return res.json({ businessCard: docs});
+    return res.json({ businessCard: docs });
   });
-}
+};
 
 const generateQR = (req, res, urlString) => {
   console.log(urlString);
@@ -76,7 +76,7 @@ const generateQR = (req, res, urlString) => {
 // call from different page
 const makeBusinessCard = (req, res) => {
   console.log(`${req.body.firstname}, ${req.body.lastname}, ${req.body.info}`);
-  if (!req.body.cardName ||!req.body.firstname || !req.body.lastname || !req.body.info) {
+  if (!req.body.cardName || !req.body.firstname || !req.body.lastname || !req.body.info) {
     return res.status(400).json({ error: 'Card name, your first & last name ,and description are required' });
   }
   console.log(req.session.account);
@@ -170,24 +170,35 @@ const cardPage = (request, response) => {
       console.log(err);
       response.status(400).json({ error: 'An error occurred' });
     }
-    const object = BusinessCard.BusinessCardModel.toAPI(docs);
+    // need to change some of the name to keep character on lin 187 under 100
+    const a = {
+      _id: docs._id,
+      cardName: docs.cardName,
+      qrcode: docs.qrcode,
+      firstName: docs.firstName,
+      lastName: docs.lastName,
+      email: docs.email,
+      phone: docs.phone,
+      title: docs.title,
+      info: docs.description,
+      links: docs.links,
+    };
     response.render('presentForm', {
-      first: object.firstName, lastName: object.lastName, email: object.email, phone: object.phone, title: object.title, info: object.description, links: object.links,
+      fn: a.firstName, ln: a.lastName, e: a.email, p: a.phone, t: a.title, i: a.info, l: a.links,
     });
   });
 };
 
-const deleteCard = (request, response) =>{
-  return BusinessCard.BusinessCardModel.delete(request.body.cardId, (err, docs) => {
+const deleteCard = (request, response) => {
+  BusinessCard.BusinessCardModel.delete(request.body.cardId, (err, docs) => {
     if (err) {
       console.log(err);
       return response.status(400).json({ error: 'An error occurred' });
     }
-    
+    console.log(docs);
     return response.json({ redirect: '/app' });
   });
-  
-}
+};
 
 module.exports.makeBusinessCard = makeBusinessCard;
 module.exports.getLastAdded = getLastAdded;
