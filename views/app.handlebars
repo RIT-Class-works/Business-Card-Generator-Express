@@ -11,21 +11,23 @@
   <link rel="stylesheet" type="text/css" href="/assets/style.css"/>
 </head>
 <body>
-  <nav><a href="/login"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
+  <nav><a href="/app"><img id="logo" src="/assets/img/face.png" alt="face logo"/></a>
     <div class="navlink"><a href="/logout">Log out</a></div>
     <div id="setting">
       <img id="gear" src="/assets/img/gear.png" alt="settingGear"/>
       <div id="drop-down-list">
-        <div class="drop-down-select">Subcription</div>
-        <div class="drop-down-select">Change Password</div>
+        <div class="drop-down-select" id="pay">Purchase</div>
+        <div class="drop-down-select" id="password-change">Change Password</div>
       </div>
     </div>
     
   </nav>
-  <div id="new">
 
+  <section id="ads"></section>
+  <div id="messageBox">
+    <h3><span id="errorMessage">Wrong username or password</span></h3>
   </div>
-  <section id="businessCards">
+  <section id="content">
     
   </section>
   <section id="pop-up-window">

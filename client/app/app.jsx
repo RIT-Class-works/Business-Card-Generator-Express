@@ -1,9 +1,37 @@
 let csrfToken = null;
+let purchased = false;
+let numbCardCreated = 0;
 
 const handleNew = ()=>{
-    redirect({redirect: '/maker'});
+    if(numbCardCreated >=2 && purchased == false){
+        handleError("You had reach the maxium amount of business card created for free");
+    }
+    else{
+        redirect({redirect: '/maker'});
+    }
 }
-
+const handlePurchase = ()=>{
+    console.log("call");
+    $.ajaxSetup({
+        headers: {
+            'X-CSRF-TOKEN': csrfToken
+        }
+    });
+    sendAjax('POST', '/purchase', null, (data)=>{
+        console.log(data.purchased);
+        purchased = data.purchased;
+        ReactDOM.render(
+            <Ads message="Thank you For Purchase. Enjoy your unlimited card generation"/>, document.querySelector("#ads")
+        );
+    });
+}
+const getPurchase = ()=>{
+    sendAjax('GET', '/account', null, (data) =>{
+        console.log(data.account.purchased)
+        purchased = data.account.purchased;
+        setup();
+    });
+}
 const LoadEditPage = (_cardId)=>{
     console.log(" this is cardId : " + _cardId);
     $.ajaxSetup({
@@ -26,6 +54,28 @@ const handleDelete = (_cardId)=>{
     sendAjax('POST', '/delete', {"cardId": _cardId}, redirect);
 
     return false;
+}
+const handlePasswordChange = (e)=>{
+    e.preventDefault();
+
+    if( $("#oldPass").val() == '' || $("#pass").val() == '' || $("#pass2").val() == '' ){
+        handleError("All field are required");
+        return false;
+    }
+
+    sendAjax('POST', $("#passwordChange").attr("action"),$("#passwordChange").serialize(), function (data) {
+            ReactDOM.render(
+                <Ads message={data.message} />, document.querySelector("#ads")
+            );
+        }
+    );;
+    
+    return false;
+}
+const openPasswordChange = ()=>{
+    ReactDOM.render(
+        <PasswordChangeWindow />, document.querySelector("#content")
+    );
 }
 const closeOptionWindow = ()=>{
     const opened = false;
@@ -56,59 +106,116 @@ const OptionWindow = (props)=>{
         return;
     }
 }
-const UI = (props) =>{
+const Ads = (props) =>{
     return (
         <div>
-            <img src="/assets/img/new.png" alt="new" onClick={handleNew} />
+            <h1>{props.message}</h1>
         </div>
     );
 }
+const PasswordChangeWindow = () =>{
+    return (
+        <form
+            id="passwordChange"
+            name="passwordChange"
+            onSubmit={handlePasswordChange}
+            action="/passwordChange"
+            method="POST"
+            className="mainForm"
+            >
+            
+            <label htmlFor="oldpass">Old Password: </label>
+            <input id="oldPass" type="password" name="oldPass" placeholder="Old password" required/>
+            <label htmlFor="pass">New Password: </label>
+            <input id="pass" type="password" name="newPass" placeholder="new password" required/>
+            <label htmlFor="pas2">Retype Password: </label>
+            <input id="pass2" type="password" name="newPass2" placeholder="retype password" required/>
+            <input type="hidden" name="_csrf" value={csrfToken} />
+            <input className="formSubmit" type="submit" value="Change" />
 
+        </form>
+    );
+};
 const QRList = (props) =>{
+    const ui = (
+        <div>
+            <img src="/assets/img/new.png" alt="new" onClick={handleNew} />
+            <p></p>
+        </div>
+    );
+    
     if(props.businessCards.length === 0){
         return(
-            <p>no businessCards code yet</p>
+            <div id="businessCards" >
+                {ui}
+            </div>
         );
     }
+    numbCardCreated = 0;
     const qrNodes = props.businessCards.map((card)=>{
+        numbCardCreated++;
         return (
-            <div>
-                <img key={card._id} src={card.qrcode} alt="QRCode" className="businessCards" onClick={()=>{openOptionWindow(card._id)}} />
+            <div key={card._id}>
+                <img key={card._id} src={card.qrcode} alt="QRCode" onClick={()=>{openOptionWindow(card._id)}} />
                 <p>{card.cardName} </p>
             </div>
-            
         );
     });
-
-    return qrNodes;
+    
+    return (
+        <div id="businessCards" >
+            {ui}
+            {qrNodes} 
+        </div>
+    );
 };
 
 const loadBusinessCardFromServer = () =>{
     sendAjax('GET', '/getQRCodes', null, (data)=>{
         ReactDOM.render(
-            <QRList businessCards={data.businessCards} />, document.querySelector("#businessCards")
+            <QRList businessCards={data.businessCards} />, document.querySelector("#content")
         );
     });
 };
 
-const setup = function(_csrf){
+const setup = function(){
+    $("#gear").click(()=>{
+        if($("#drop-down-list").css("visibility") == "hidden"){
+            $("#drop-down-list").css({"visibility":"visible"})
+        }
+        else{
+            $("#drop-down-list").css({"visibility":"hidden"})
+        }  
+    })
+
+    $("#pay").click(handlePurchase);
+    $("#password-change").click(openPasswordChange);
+
+    let _message = "Pay a one-time fee to unlock unlimited card creation";
+
+    console.log(purchased);
+
+    if(purchased){
+        _message = "Thank you For Purchase. Enjoy your unlimited card generation";
+    }
     ReactDOM.render(
-        <UI csrf={_csrf} />, document.querySelector("#new")
+        <Ads message={_message} />, document.querySelector("#ads")
     );
     ReactDOM.render(
-        <QRList businessCards={[]} />, document.querySelector("#businessCards")
+        <QRList businessCards={[]} />, document.querySelector("#content")
     );
 
     loadBusinessCardFromServer();
 };
 
 const getToken = () =>{ 
-    sendAjax('GET', '/getToken', null, (result) =>{
-        csrfToken = result.csrfToken;
-        setup(result.csrfToken)
+    sendAjax('GET', '/getToken', null, (data) =>{
+        csrfToken = data.csrfToken;
+        getPurchase()
     });
     
 };
+
 
 $(document).ready(function(){
     getToken();

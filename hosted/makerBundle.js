@@ -59,9 +59,9 @@ var handleEdit = function handleEdit(e) {
   }
 
   sendAjax('POST', $("#form").attr("action"), $("#form").serialize(), function (data) {
-    ReactDOM.render( /*#__PURE__*/React.createElement(QRCode, {
+    ReactDOM.render( /*#__PURE__*/React.createElement(QRWindow, {
       url: data.businessCard
-    }), document.querySelector("#content"));
+    }), document.querySelector("#pop-up-window"));
   });
   ;
   return false;

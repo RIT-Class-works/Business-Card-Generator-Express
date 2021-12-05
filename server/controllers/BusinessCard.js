@@ -57,7 +57,7 @@ const generateQR = (req, res, urlString) => {
     margin: 1,
     color: {
       dark: '#010599FF',
-      light: '#FFBF60FF',
+      light: '#F4A698',
     },
   };
 

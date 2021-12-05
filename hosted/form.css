@@ -29,12 +29,12 @@ form {
     padding: 20px;
     border-radius: 6px;
     background: #fff;
-    box-shadow: 0 0 10px 0 #cc0052; 
+    box-shadow: 0 0 10px 0 #F48668; 
 }
 .banner {
     position: relative;
     height: 210px;
-    background-color: cyan;
+    background-color: #F4A698;
     background-size: cover;
     display: flex;
     justify-content: center;
@@ -50,7 +50,6 @@ form {
 
 .banner::after {
     content: "";
-    background-color: rgba(0, 0, 0, 0.4); 
     position: absolute;
     width: 100%;
     height: 100%;
@@ -70,12 +69,12 @@ textarea {
     padding: 5px;
 }
 .item:hover p, input:hover::placeholder {
-    color: #cc0052;
+    color: #F48668;
 }
 .item input:hover, .item textarea:hover {
     border: 1px solid transparent;
-    box-shadow: 0 0 6px 0 #cc0052;
-    color: #cc0052;
+    box-shadow: 0 0 6px 0 #F48668;
+    color: #F48668;
 }
 .item {
     position: relative;
@@ -90,13 +89,13 @@ button {
     padding: 10px;
     border: none;
     border-radius: 5px; 
-    background: #cc0052;
+    background: #F48668;
     font-size: 16px;
     color: #fff;
     cursor: pointer;
 }
 button:hover {
-    background: #ff0066;
+    background: #F48668;
 }
 #content {
     margin-top: 30px;
@@ -121,7 +120,6 @@ button:hover {
 .pop-up{
     width: 100%;
     height: 100%;
-    background-color: rgba( 0, 0, 0, 0.4);
     position: absolute;
     top: 0;
     display: flex;
@@ -131,10 +129,13 @@ button:hover {
 .pop-up-content{
     width: 500px;
     height: 300px;
-    background-color: white;
+    background-color:white;
     border-radius: 4px;
     text-align: center;
     padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     position: relative;
 }
 

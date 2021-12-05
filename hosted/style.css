@@ -10,14 +10,15 @@ html, body {
     height: 40px;
     width: 40;
     padding-top: 5px;
+    padding-left: 5px;
     float:left;
-    border-radius: 8px;
+    border-radius: 10px;
 }
 
 nav {
     width: 100%;
     height: 50px;
-    background-color: #55acee;
+    background-color: #DD614A;
 }
 
 nav:nth-child(1) {
@@ -39,13 +40,13 @@ nav:nth-child(1) {
     text-decoration: none;
     padding: 5px;
     border-radius: 4px;
-    background-color: #55acee;
+    background-color: #F48668;
     transition: background-color 0.4s ease;
 }
 
 .navlink a:hover {
     transition: background-color 0.8s ease;
-    background-color: #66bdff;
+    background-color: #C5C392;
 }
 
 #setting {
@@ -66,7 +67,7 @@ nav #gear {
 
 #drop-down-list{
     border-radius: 4px;
-    background-color: rgba(0, 0, 0, .5);
+    background-color: rgba(197, 195, 146, 1);
     position: absolute;
     top:110%;
     left:0;
@@ -75,6 +76,8 @@ nav #gear {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    visibility: hidden;
+    cursor: pointer;
 }
 .drop-down-select{
     padding: 1rem;
@@ -87,7 +90,7 @@ nav #gear {
     height: 300px;
     width: 350px;
     margin: 0 auto;
-    padding-top: 350px;
+    padding-top: 100px;
     font-size: 1.2em;
 }
 
@@ -97,7 +100,7 @@ nav #gear {
 
 .mainForm label {
     display: inline-block;
-    width: 100px;
+    width: auto;
     margin-right: 10px;
     text-align: right;
     font-size: 1.2em;
@@ -110,10 +113,10 @@ nav #gear {
     margin: 0 auto;
     margin-top: 14px;
     font-size: 1.2em;
-    width: 100px;
-    background-color: #55acee;
+    width: auto;
+    background-color: #F48668;
     border-radius: 2px;
-    border-color: #66acee;
+    border-color: #DD614A;
     padding: 3px 0px;
     color: white;
     text-decoration: none;
@@ -125,21 +128,50 @@ nav #gear {
 
 .formSubmit:hover {
     transition: background-color 0.4s ease;
-    background-color: #338acc;
+    background-color: #C5C392;
 }
 
-#user, #pass, #pass2 {
+#user, #oldpass, #pass, #pass2 {
     text-align: center;
     font-size: 1.1em;
-    width: 180px;
+    width: auto;
     border-radius: 6px;
 }
 
 #user:focus, #pass:focus, #pass2:focus {
     outline: none;
-    box-shadow: 0px 0px 1px 1px #55acee;
+    box-shadow: 0px 0px 1px 1px #C5C392;
 }
-
+#ads{
+    display: flex;
+    justify-content: center;
+    text-align: center;
+}
+#content{
+    margin-top: 50px;
+    margin-left: 100px;
+    margin-right: 100px;
+    margin-bottom: 100px;
+}
+#businessCards{
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: top;
+}
+#businessCards div{
+    margin: 30px;
+    font-size: 20;
+    color: grey;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    
+}
+#businessCards div img{
+    width: 200px;
+    height: 200px;
+}
 #messageBox {
     display:none;
     top: 250px;
@@ -167,7 +199,7 @@ nav #gear {
 #errorMessage {
     font-size: 1.2em;
     font-weight: bold;
-    color: red;
+    color: #F48668;
     font-style: italic;
 }
 
@@ -185,7 +217,7 @@ nav #gear {
 #cards {
     width: 40%;
     min-width: 400px;
-    border: 2px solid #55acee;
+    border: 2px solid #C5C392;
     border-radius: 4px;
     margin: 0 auto;
     margin-top: 100px;
@@ -204,11 +236,35 @@ nav #gear {
 .pop-up-content{
     width: 500px;
     height: 300px;
-    background-color: white;
+    background-color: #C5C392;
     border-radius: 4px;
     text-align: center;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
     position: relative;
+    cursor: pointer;
+}
+.pop-up-content button{
+    transition: background-color 0.4s ease;
+    width: 100px;
+    display: block;
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 14px;
+    font-size: 1.2em;
+    background-color: #F48668;
+    border-radius: 10px;
+    border-color: #DD614A;
+    padding: 3px 0px;
+    color: white;
+    text-decoration: none;
+}
+.pop-up-content button:hover {
+    transition: background-color 0.4s ease;
+    background-color: #C5C392;
 }
 
 .close{

@@ -92,7 +92,8 @@ BusinessCardSchema.statics.findQRCode = (ownerId, callback) => {
     owner: convertID(ownerId),
   };
 
-  return BusinessCardModel.find(search).select('qrcode cardName ObjectId').sort({createDate:-1}).lean().exec(callback);
+  return BusinessCardModel.find(search).select('qrcode cardName ObjectId').sort({ createDate: -1 }).lean()
+    .exec(callback);
 };
 
 BusinessCardSchema.statics.findBusinessCard = (cardId, callback) => {

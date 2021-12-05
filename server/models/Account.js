@@ -2,6 +2,7 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
+const convertID = mongoose.Types.ObjectId;
 
 let AccountModel = {};
 const iterations = 10000;
@@ -22,6 +23,10 @@ const AccountSchema = new mongoose.Schema({
   },
   password: {
     type: String,
+    required: true,
+  },
+  purchased: {
+    type: Boolean,
     required: true,
   },
   createdDate: {
@@ -79,6 +84,33 @@ AccountSchema.statics.authenticate = (username, password, callback) => {
       return callback();
     });
   });
+};
+AccountSchema.statics.makePurchase = (accountID, callback) => {
+  const search = {
+    _id: convertID(accountID),
+  };
+
+  console.log(`id search:${search}`);
+
+  return AccountModel.findByIdAndUpdate(search, { purchased: true }, { upsert: false, new: true })
+    .exec(callback);
+};
+AccountSchema.statics.changePass = (accountID, json, callback) => {
+  const search = {
+    _id: convertID(accountID),
+  };
+
+  console.log(`id search:${search}`);
+
+  return AccountModel.findByIdAndUpdate(search, json, { upsert: false, new: true })
+    .exec(callback);
+};
+AccountSchema.statics.getPurchased = (accountID, callback) => {
+  const search = {
+    _id: convertID(accountID),
+  };
+
+  return AccountModel.find(search).select('purchased').lean().exec(callback);
 };
 
 AccountModel = mongoose.model('Account', AccountSchema);

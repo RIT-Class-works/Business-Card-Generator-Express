@@ -49,7 +49,7 @@ const handleEdit = (e) =>{
 
     sendAjax('POST', $("#form").attr("action"),$("#form").serialize(), function (data) {
             ReactDOM.render(
-                <QRCode url={data.businessCard} />, document.querySelector("#content")
+                <QRWindow url={data.businessCard} />, document.querySelector("#pop-up-window")
             );
         }
     );;
