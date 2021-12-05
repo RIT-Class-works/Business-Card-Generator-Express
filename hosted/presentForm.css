@@ -1,7 +1,7 @@
 html, body {
     min-height: 100%;
 }
-body, div, form, h2, p { 
+body, div, section, h2, p { 
     padding: 0;
     margin: 0;
     outline: none;
@@ -10,19 +10,23 @@ body, div, form, h2, p {
     color: #666;
     line-height: 22px;
 }
-h1 {
-    position: absolute;
-    margin: 0;
-    font-size: 32px;
-    color: #fff;
-    z-index: 2;
-}
+
 h2 {
-    font-size: 32px;
+    font-size: 25px;
+}
+
+body{
+    display: flex;
+    justify-content: center;
+    align-content: center;
 }
 
 #form {
-    width: 100%;
+    width: 90%;
+    margin-top: auto;
+    margin-left: 10px;
+    margin-right: 10px;
+    margin-bottom: auto;
     padding: 20px;
     border-radius: 6px;
     background: #fff;
@@ -34,53 +38,37 @@ h2 {
     background-color: #F4A698;
     background-size: cover;
     display: flex;
+    align-content: center;
     text-align: center;
 }
-.banner p {
-    width: 50%;
+
+.banner h1 {
+    width: 100%;
     font-size: 30;
     height: auto;
 }
 
-.banner::after {
-    content: "";
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-}
-
 p {
     margin-bottom: 10px;
-    border: 1px solid #ccc;
+    font-size: 20px;
+    border: 1px solid #F48668;
     border-radius: 3px;
-    width: calc(100% - 10px);
+    width: 100%;
     padding: 5px;
 }
 
 .item {
+    width:100%;
     position: relative;
     margin: 10px 0;
 }
 
-#content {
-    margin-top: 30px;
-    text-align: center;
-}
-@media (min-width: 568px) {
-    .name-item, .contact-item {
+/* @media (min-width: 568px) {
+    .item {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
+    width: calc(50% - 8px);
     }
-    .contact-item .item {
-        width: calc(50% - 8px);
-    }
-    .name-item input {
-        width: calc(50% - 20px);
-    }
-    .contact-item input {
-        width: calc(100% - 12px);
-    }
-}
+} */
 

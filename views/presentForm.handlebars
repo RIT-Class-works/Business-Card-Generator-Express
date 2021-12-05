@@ -14,45 +14,44 @@
   <body>
       <!-- I use and modified a template from w3doc form-->
     <section id="form">
-      <div className="banner">
+      <div class="banner">
           <h1>Hello, This is my Business Card</h1>
       </div>
-      <div className="item">
+      <div class="item">
           <h2>Name:</h2>
           <p>{{fn}} {{ln}}</p>
       </div>
-      <div className="contact-item">
-          {{#if e}}
-          <div className="item">
-              <h2>Email:</h2>
-              <p id="email"> {{e}} </p>
-          </div>
-          {{/if}}
-          {{#if p}}
-          <div className="item">
-              <h2>Phone #:</h2>
-              <p id="phone"> {{p}} </p>
-          </div>
-          {{/if}}
+      {{#if e}}
+      <div class="item">
+          <h2>Email:</h2>
+          <p id="email"> {{e}} </p>
       </div>
+      {{/if}}
+      {{#if p}}
+      <div class="item">
+          <h2>Phone #:</h2>
+          <p id="phone"> {{p}} </p>
+      </div>
+      {{/if}}
       {{#if t}}
-      <div className="item">
-          <h2>Job/Position</h2>
+      <div class="item">
+          <h2>Job/Position:</h2>
           <p id="title"> {{t}} </p>
       </div>
       {{/if}}
-      <div className="item">
-          <h2>Description About Yourself</h2>
+      <div class="item">
+          <h2>Description:</h2>
           <p id="info">{{i}}</p>
       </div>
       {{#if l}}
-      <div className="item" id="links">
-          <h2>Your Links</h2>
+      <div class="item" id="links">
+          <h2>Links:</h2>
           {{#each l}}
-            <div><a href="{{this}}" className="link" >{{this}}</a></div>
+            <p><a href="{{this}}" className="link" >{{this}}</a></p>
           {{/each}}
       </div>
       {{/if}}
+      
     </section>
   </body>
 </html>

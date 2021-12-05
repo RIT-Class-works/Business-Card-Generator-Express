@@ -118,12 +118,14 @@ const BusinessForm = (props) =>{
     }
     
     let links;
-    console.log(props.info.links);
-    if(props.info.links.length >0){
-        links = props.info.links.map((link)=>{
-            <div>
-                <input type="url" name="link" className="link" value={link} />
-            </div>
+    console.log("links: " +props.info.links);
+    if(props.info.links.length > 0){
+        links =  props.info.links.map((data)=>{
+            return(
+                <div key={data}>
+                    <input type="url" name="link" className="link" defaultValue={data} />
+                </div>
+            ); 
         });
     }
     else{
@@ -133,6 +135,8 @@ const BusinessForm = (props) =>{
             </div>
         );
     }
+
+    console.log(links);
 
     let email;
     if(props.info.email !=""){

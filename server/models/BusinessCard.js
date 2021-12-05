@@ -55,7 +55,6 @@ const BusinessCardSchema = new mongoose.Schema({
     type: [String],
     required: false,
     trim: true,
-    set: setString,
   },
   qrcode: {
     type: String,

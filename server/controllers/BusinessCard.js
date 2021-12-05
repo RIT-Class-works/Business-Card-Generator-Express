@@ -35,9 +35,9 @@ const makeEdit = (req, res) => {
     phone: req.body.phone,
     title: req.body.title,
     description: req.body.info,
-    links: req.body.link,
+    links: String(req.body.link).split(','),
   };
-  console.log(json);
+  console.log(json.links);
   BusinessCard.BusinessCardModel.update(req.body._id, json, (err, docs) => {
     if (err) {
       console.log(err);
@@ -89,7 +89,7 @@ const makeBusinessCard = (req, res) => {
     phone: req.body.phone,
     title: req.body.title,
     description: req.body.info,
-    links: req.body.link,
+    links: String(req.body.link).split(','),
     qrcode: null,
     owner: req.session.account._id,
   };
@@ -102,7 +102,7 @@ const makeBusinessCard = (req, res) => {
   businessCardPromise.then(() => {
     // generate qrcode
     const ObjectId = BusinessCard.BusinessCardModel.toAPI(newBusinessCard)._id;
-    console.log(ObjectId);
+    console.log(newBusinessCard);
     generateQR(req, res, `${req.headers.host}/cardPage?id=${ObjectId}`);
   });
 

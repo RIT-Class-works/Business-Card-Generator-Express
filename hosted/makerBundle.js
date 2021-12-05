@@ -163,16 +163,17 @@ var BusinessForm = function BusinessForm(props) {
   }
 
   var links;
-  console.log(props.info.links);
+  console.log("links: " + props.info.links);
 
   if (props.info.links.length > 0) {
-    links = props.info.links.map(function (link) {
-      /*#__PURE__*/
-      React.createElement("div", null, /*#__PURE__*/React.createElement("input", {
+    links = props.info.links.map(function (data) {
+      return /*#__PURE__*/React.createElement("div", {
+        key: data
+      }, /*#__PURE__*/React.createElement("input", {
         type: "url",
         name: "link",
         className: "link",
-        value: link
+        defaultValue: data
       }));
     });
   } else {
@@ -183,6 +184,7 @@ var BusinessForm = function BusinessForm(props) {
     }));
   }
 
+  console.log(links);
   var email;
 
   if (props.info.email != "") {

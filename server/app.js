@@ -67,6 +67,7 @@ app.use(session({
 app.engine('handlebars', expressHandlebars({ defaultLayout: 'main' }));
 app.set('view engine', 'handlebars');
 app.set('views', `${__dirname}/../views`);
+
 app.use(cookieParser());
 app.use(csrf());
 app.use((err, req, res, next) => {
