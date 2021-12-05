@@ -14,51 +14,45 @@
   <body>
       <!-- I use and modified a template from w3doc form-->
     <section id="form">
-      <div id="businessForm">
       <div className="banner">
           <h1>Hello, This is my Business Card</h1>
       </div>
       <div className="item">
-          <p>Name</p>
-          <div className="name-item">
-              <p id="firstname"> {{fn}} </p>
-              <p id="lastname"> {{ln}} </p>
-          </div>
+          <h2>Name:</h2>
+          <p>{{fn}} {{ln}}</p>
       </div>
-      
       <div className="contact-item">
           {{#if e}}
           <div className="item">
-              <p>Email</p>
+              <h2>Email:</h2>
               <p id="email"> {{e}} </p>
           </div>
           {{/if}}
           {{#if p}}
           <div className="item">
-              <p>Phone</p>
+              <h2>Phone #:</h2>
               <p id="phone"> {{p}} </p>
           </div>
           {{/if}}
       </div>
       {{#if t}}
       <div className="item">
-          <p>Job/Position</p>
+          <h2>Job/Position</h2>
           <p id="title"> {{t}} </p>
       </div>
       {{/if}}
       <div className="item">
-          <p>Description About Yourself</p>
+          <h2>Description About Yourself</h2>
           <p id="info">{{i}}</p>
       </div>
       {{#if l}}
       <div className="item" id="links">
-          <p>Your Links</p>
+          <h2>Your Links</h2>
           {{#each l}}
-            <a href="{{this}}" className="link" >{{this}}</a> <br>
+            <div><a href="{{this}}" className="link" >{{this}}</a></div>
           {{/each}}
       </div>
       {{/if}}
-    </div>
     </section>
   </body>
 </html>
