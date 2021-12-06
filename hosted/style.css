@@ -85,7 +85,11 @@ nav #gear {
     color: white;
 }
 
-
+form {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
 .mainForm {
     height: 300px;
     width: 350px;
@@ -102,14 +106,13 @@ nav #gear {
     display: inline-block;
     width: auto;
     margin-right: 10px;
-    text-align: right;
+    text-align: left;
     font-size: 1.2em;
 }
 
 .formSubmit {
     transition: background-color 0.4s ease;
     display: block;
-    text-align: center;
     margin: 0 auto;
     margin-top: 14px;
     font-size: 1.2em;

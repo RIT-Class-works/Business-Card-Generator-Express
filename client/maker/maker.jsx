@@ -195,7 +195,7 @@ const BusinessForm = (props) =>{
     return (
         <form id="form" action="/edit" method="POST" onSubmit={handleEdit}>
                 <div className="banner">
-                    <input type="text" name="cardName"  defaultValue={props.info.cardName} id="cardName" required/>
+                    <p type="text" name="cardName"  id="cardName" required>{props.info.cardName}</p>
                 </div>
                 <div className="item">
                     <p>Name</p>

@@ -255,13 +255,12 @@ var BusinessForm = function BusinessForm(props) {
     onSubmit: handleEdit
   }, /*#__PURE__*/React.createElement("div", {
     className: "banner"
-  }, /*#__PURE__*/React.createElement("input", {
+  }, /*#__PURE__*/React.createElement("p", {
     type: "text",
     name: "cardName",
-    defaultValue: props.info.cardName,
     id: "cardName",
     required: true
-  })), /*#__PURE__*/React.createElement("div", {
+  }, props.info.cardName)), /*#__PURE__*/React.createElement("div", {
     className: "item"
   }, /*#__PURE__*/React.createElement("p", null, "Name"), /*#__PURE__*/React.createElement("div", {
     className: "name-item"

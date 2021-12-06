@@ -41,7 +41,7 @@ form {
     align-items: center;
     text-align: center;
 }
-.banner input {
+.banner input, p {
     width: 50%;
     font-size: 30;
     height: auto;
