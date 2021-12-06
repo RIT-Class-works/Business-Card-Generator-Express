@@ -53,7 +53,7 @@ var handleEdit = function handleEdit(e) {
     width: 'hide'
   }, 350);
 
-  if ($("#cardName").val() == '' || $("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '') {
+  if ($("#firstname").val() == '' || $("#lastname").val() == '' || $("#info").val() == '') {
     handleError("Card Name, Your First & Last name, and Description are required");
     return false;
   }
